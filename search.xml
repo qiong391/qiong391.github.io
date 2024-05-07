@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Hello World</title>
+    <url>/2024/04/28/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<span id="more"></span>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>地图切片</title>
+    <url>/2024/04/30/%E5%9C%B0%E5%9B%BE%E5%88%87%E7%89%87/</url>
+    <content><![CDATA[<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>瓦片数据是将矢量或影像数据进行预处理，采用高效的缓存机制（如金字塔）形成的缓存图片集，采用“级、行、列”方式进行组织，可在网页中快速加载。因此，瓦片地图加载是根据客户端请求的地图范围和级别，通过计算行列号获取对应级别下网格的瓦片（即<a href="https://cloud.tencent.com/act/pro/promotion-cvm?from_column=20065&from=20065">服务器</a>预裁剪的图片），由这些瓦片集在客户端形成一张地图。</p>
+<span id="more"></span>
+
+<p><img src="/imagePyramid.png" alt="影像金字塔" title="影像金字塔"></p>
+<h2 id="重要概念"><a href="#重要概念" class="headerlink" title="重要概念"></a>重要概念<img src="https://ask.qcloudimg.com/http-save/yehe-3647312/urz6lpwzvk.jpeg" alt="切片概念" title="切片概念"></h2><h3 id="切片方案原点-Tile-scheme-origin"><a href="#切片方案原点-Tile-scheme-origin" class="headerlink" title="切片方案原点(Tile scheme origin)"></a>切片方案原点(Tile scheme origin)</h3><p>采用源数据集空间参考的坐标值，一般切片方案原点取左上角（例如：谷歌切片方案的原点是<code>[-20037508.34,20037508.34]</code>），但是有些切片方案原点确实左下角（例如：TMS切片方案原点是<code>[-20037508.34,-20037508.34]</code>）。源数据集的范围必须在此原点范围内（但不必与原点重合）。</p>
+<h3 id="切片大小（Tile-Size：width，height）"><a href="#切片大小（Tile-Size：width，height）" class="headerlink" title="切片大小（Tile Size：width，height）"></a>切片大小（Tile Size：width，height）</h3><p>缓存切片的宽度和高度（以像素为单位）。默认设置为 256x256。为在性能和可管理性之间寻求最佳平衡，应避免偏离宽度值 256 或 512。</p>
+<h3 id="dpi"><a href="#dpi" class="headerlink" title="dpi"></a>dpi</h3><p>专用输出设备的每英寸点数。如果所选择的 DPI 与输出设备（通常是显示器）的分辨率不匹配，则切片将显示错误比例。默认值为 96。</p>
+<h3 id="分辨率组"><a href="#分辨率组" class="headerlink" title="分辨率组"></a>分辨率组</h3><p>这个是在做切片的时候非常重要的一个参数，在前面一片文章里面已经说过了。</p>
+<h3 id="切片范围"><a href="#切片范围" class="headerlink" title="切片范围"></a>切片范围</h3><p>切片范围不是地图范围，是切片方案下的做切片的范围。例如，谷歌的切片范围是：<code>[-20037508.34,-20037508.34,20037508.34,20037508.34]</code>。</p>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><p>GIS的底图一直使用金字塔技术进行切图，使用户能够快速访问指定级别的地图或者影像。但是切图本身是一张图片，无法进行交互。于是又引入了矢量图层用来显示矢量点线面，这通常需要先获取矢量地理数据（例如GeoJson），然后通过前端将其绘制成不同元素便能通过鼠标进行响应交互了。</p>
+<h2 id="切片处理"><a href="#切片处理" class="headerlink" title="切片处理"></a>切片处理</h2><p>根据zoom获取显示范围内tiles（x、y、z）、对应位置获取并加载对应xyz的瓦片</p>
+<h2 id="一些调试代码"><a href="#一些调试代码" class="headerlink" title="一些调试代码"></a>一些调试代码</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="title function_">loadTiles</span>(<span class="params">zoom</span>)&#123;</span><br><span class="line">      <span class="comment">// 根据缩放级别和当前地图范围计算瓦片范围</span></span><br><span class="line">      <span class="keyword">const</span> mapExtent = <span class="variable language_">this</span>.<span class="property">map</span>.<span class="title function_">getView</span>().<span class="title function_">calculateExtent</span>();</span><br><span class="line">      <span class="keyword">const</span> tileLayer = <span class="variable language_">this</span>.<span class="property">map</span>.<span class="title function_">getLayers</span>().<span class="title function_">item</span>(<span class="number">0</span>); <span class="comment">// 获取第一个图层</span></span><br><span class="line">      <span class="keyword">const</span> tileSource = tileLayer.<span class="title function_">getSource</span>(); <span class="comment">// 获取图层的源</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> tileGrid = <span class="variable language_">this</span>.<span class="property">map</span>.<span class="title function_">getLayers</span>().<span class="title function_">item</span>(<span class="number">0</span>).<span class="title function_">getSource</span>().<span class="title function_">getTileGrid</span>();</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">const</span> mapExtent_3857 = [<span class="title function_">fromLonLat</span>([mapExtent[<span class="number">0</span>],mapExtent[<span class="number">1</span>]])[<span class="number">0</span>],</span><br><span class="line">        <span class="title function_">fromLonLat</span>([mapExtent[<span class="number">0</span>],mapExtent[<span class="number">1</span>]])[<span class="number">1</span>],</span><br><span class="line">        <span class="title function_">fromLonLat</span>([mapExtent[<span class="number">2</span>],mapExtent[<span class="number">3</span>]])[<span class="number">0</span>],</span><br><span class="line">        <span class="title function_">fromLonLat</span>([mapExtent[<span class="number">2</span>],mapExtent[<span class="number">3</span>]])[<span class="number">1</span>]]</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 计算当前地图范围内的瓦片行列号</span></span><br><span class="line">      tileGrid.<span class="title function_">forEachTileCoord</span>(mapExtent_3857, <span class="title class_">Math</span>.<span class="title function_">round</span>(zoom), <span class="function">(<span class="params">tileCoord</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(tileCoord)</span><br><span class="line">        <span class="comment">// 加载对应的瓦片</span></span><br><span class="line">        <span class="keyword">const</span> tileUrl = tileSource.<span class="title function_">getTileUrlFunction</span>()(tileCoord);</span><br><span class="line">        <span class="comment">// console.log(&#x27;Tile URL:&#x27;, tileUrl)</span></span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;,</span><br></pre></td></tr></table></figure>
+
+<pre><code>url: &#39;http://127.0.0.1:3000/tile/&#123;z&#125;/&#123;x&#125;/&#123;y&#125;&#39;
+
+this.map.addLayer(new TileLayer(&#123;
+        source: new TileDebug(&#123;
+          projection: &#39;EPSG:3857&#39;,            // Web墨卡托投影坐标系
+          tileGrid: this.tdLayervec.getSource().getTileGrid()   // 获取地图的瓦片坐标系
+        &#125;)
+      &#125;))
+</code></pre>
+]]></content>
+      <categories>
+        <category>Note</category>
+      </categories>
+      <tags>
+        <tag>Tile</tag>
+        <tag>GIS</tag>
+      </tags>
+  </entry>
+</search>
