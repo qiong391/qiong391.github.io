@@ -202,7 +202,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2024/06/27/postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02%20to%20WGS84%EF%BC%89/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2024/06/27/postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02%20to%20WGS84%EF%BC%89/" class="post-title-link" itemprop="url">postgresql中坐标转换（GCJ-02 to WGS84）</a>
         </h2>
 
         <div class="post-meta">
@@ -211,16 +211,19 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2024-06-27 19:52:44" itemprop="dateCreated datePublished" datetime="2024-06-27T19:52:44+08:00">2024-06-27</time>
+              <time title="创建时间：2024-06-27 19:52:44 / 修改时间：19:57:51" itemprop="dateCreated datePublished" datetime="2024-06-27T19:52:44+08:00">2024-06-27</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-05-11 13:54:51" itemprop="dateModified" datetime="2024-05-11T13:54:51+08:00">2024-05-11</time>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
               </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Note/" itemprop="url" rel="index"><span itemprop="name">Note</span></a>
+                </span>
+            </span>
 
           <br>
             <span class="post-meta-item" title="本文字数">
@@ -228,14 +231,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>15</span>
+              <span>2.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>5 分钟</span>
             </span>
 
         </div>
@@ -247,7 +250,28 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="postgresql中坐标转换"><a href="#postgresql中坐标转换" class="headerlink" title="postgresql中坐标转换"></a>postgresql中坐标转换</h2>
+          <h1 id="postgresql中坐标转换（GCJ-02-to-WGS84）"><a href="#postgresql中坐标转换（GCJ-02-to-WGS84）" class="headerlink" title="postgresql中坐标转换（GCJ-02 to WGS84）"></a>postgresql中坐标转换（GCJ-02 to WGS84）</h1><p>PostgreSQL 默认情况下没有提供直接将高德坐标（GCJ-02）转换为 WGS84 坐标的函数。在 PostGIS 扩展中，没有直接支持高德坐标转换的函数。要在 PostgreSQL 中实现高德坐标到 WGS84 坐标的转换，需要使用外部库或者自定义函数。这里通过PostgreSQL 中的plpgsql扩展编写存储过程和函数实现坐标转换。</p>
+<h2 id="安装plpgsql扩展"><a href="#安装plpgsql扩展" class="headerlink" title="安装plpgsql扩展"></a>安装plpgsql扩展</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> EXTENSION plpgsql;</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建自定义函数"><a href="#创建自定义函数" class="headerlink" title="创建自定义函数"></a>创建自定义函数</h2><h3 id="主函数"><a href="#主函数" class="headerlink" title="主函数"></a>主函数</h3><p>函数参数为高德坐标的纬度 lat 和经度 lon，返回转换后的 WGS84 坐标的纬度 wgs84_lat 和经度 wgs84_lon。</p>
+<p>其中，先判断输入坐标是否在中国范围内（通过 out_of_china 变量），如果在中国范围外则直接返回原始坐标，否则进行坐标转换的计算。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE <span class="keyword">FUNCTION</span> gcj02towgs84(lat float8, lon float8)</span><br><span class="line"><span class="keyword">RETURNS</span> <span class="keyword">TABLE</span> (wgs84_lat float8, wgs84_lon float8) <span class="keyword">AS</span> $$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    pi float8 :<span class="operator">=</span> <span class="number">3.1415926535897932384626</span>;</span><br><span class="line">    ee float8 :<span class="operator">=</span> <span class="number">0.00669342162296594323</span>;</span><br><span class="line">    a float8 :<span class="operator">=</span> <span class="number">6378245.0</span>;</span><br><span class="line">    out_of_china <span class="type">BOOLEAN</span>;</span><br><span class="line">    dLat float8;</span><br><span class="line">    dLon float8;</span><br><span class="line">    radLat float8;</span><br><span class="line">    magic float8;</span><br><span class="line">    sqrtMagic float8;</span><br><span class="line">    mgLat float8;</span><br><span class="line">    mgLon float8;</span><br><span class="line">    lontitude float8;</span><br><span class="line">    latitude float8;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    out_of_china :<span class="operator">=</span> (lat <span class="operator">&lt;</span> <span class="number">0.8293</span> <span class="keyword">OR</span> lat <span class="operator">&gt;</span> <span class="number">55.8271</span> <span class="keyword">OR</span> lon <span class="operator">&lt;</span> <span class="number">72.004</span> <span class="keyword">OR</span> lon <span class="operator">&gt;</span> <span class="number">137.8347</span>);</span><br><span class="line">    </span><br><span class="line">    IF out_of_china <span class="keyword">THEN</span></span><br><span class="line">        wgs84_lat :<span class="operator">=</span> lat;</span><br><span class="line">        wgs84_lon :<span class="operator">=</span> lon;</span><br><span class="line">    <span class="keyword">ELSE</span></span><br><span class="line">        dLat :<span class="operator">=</span> transformLat(lon <span class="operator">-</span> <span class="number">105.0</span>, lat <span class="operator">-</span> <span class="number">35.0</span>);</span><br><span class="line">        dLon :<span class="operator">=</span> transformLon(lon <span class="operator">-</span> <span class="number">105.0</span>, lat <span class="operator">-</span> <span class="number">35.0</span>);</span><br><span class="line">        radLat :<span class="operator">=</span> lat <span class="operator">/</span> <span class="number">180.0</span> <span class="operator">*</span> pi;</span><br><span class="line">        magic :<span class="operator">=</span> <span class="built_in">sin</span>(radLat);</span><br><span class="line">        magic :<span class="operator">=</span> <span class="number">1</span> <span class="operator">-</span> ee <span class="operator">*</span> magic <span class="operator">*</span> magic;</span><br><span class="line">        sqrtMagic :<span class="operator">=</span> <span class="built_in">sqrt</span>(magic);</span><br><span class="line">        dLat :<span class="operator">=</span> (dLat <span class="operator">*</span> <span class="number">180.0</span>) <span class="operator">/</span> ((a <span class="operator">*</span> (<span class="number">1</span> <span class="operator">-</span> ee)) <span class="operator">/</span> (magic <span class="operator">*</span> sqrtMagic) <span class="operator">*</span> pi);</span><br><span class="line">        dLon :<span class="operator">=</span> (dLon <span class="operator">*</span> <span class="number">180.0</span>) <span class="operator">/</span> (a <span class="operator">/</span> sqrtMagic <span class="operator">*</span> <span class="built_in">cos</span>(radLat) <span class="operator">*</span> pi);</span><br><span class="line">        mgLat :<span class="operator">=</span> lat <span class="operator">+</span> dLat;</span><br><span class="line">        mgLon :<span class="operator">=</span> lon <span class="operator">+</span> dLon;</span><br><span class="line">        lontitude :<span class="operator">=</span> lon <span class="operator">*</span> <span class="number">2</span> <span class="operator">-</span> mgLon;</span><br><span class="line">        latitude :<span class="operator">=</span> lat <span class="operator">*</span> <span class="number">2</span> <span class="operator">-</span> mgLat;</span><br><span class="line">        </span><br><span class="line">        wgs84_lat :<span class="operator">=</span> latitude;</span><br><span class="line">        wgs84_lon :<span class="operator">=</span> lontitude;</span><br><span class="line">    <span class="keyword">END</span> IF;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">RETURN</span> NEXT;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$ <span class="keyword">LANGUAGE</span> plpgsql;</span><br></pre></td></tr></table></figure>
+
+<p>一些解释：</p>
+<ul>
+<li><code>$$</code>：表示函数体开始的标记。</li>
+<li><code>RETURNS TABLE</code> ：指定了返回结果的列，并且将结果集作为表返回，包含了 <code>wgs84_lat</code> 和 <code>wgs84_lon</code> 两列。</li>
+<li><code>LANGUAGE plpgsql</code>：指定函数使用的语言为 PL&#x2F;pgSQL，这是 PostgreSQL 的过程化 SQL 语言，支持编写存储过程和函数。</li>
+</ul>
+<h3 id="经纬度的转换"><a href="#经纬度的转换" class="headerlink" title="经纬度的转换"></a>经纬度的转换</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--将经度 x 和纬度 y 转换为新的纬度坐标，用于gcj02towgs84函数中的计算</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE <span class="keyword">FUNCTION</span> transformLat(x float8, y float8)</span><br><span class="line"><span class="keyword">RETURNS</span> float8 <span class="keyword">AS</span> $$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    ret float8;</span><br><span class="line">   	pi float8 :<span class="operator">=</span> <span class="number">3.1415926535897932384626</span>;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    ret :<span class="operator">=</span> <span class="number">-100.0</span> <span class="operator">+</span> <span class="number">2.0</span> <span class="operator">*</span> x <span class="operator">+</span> <span class="number">3.0</span> <span class="operator">*</span> y <span class="operator">+</span> <span class="number">0.2</span> <span class="operator">*</span> y <span class="operator">*</span> y <span class="operator">+</span> <span class="number">0.1</span> <span class="operator">*</span> x <span class="operator">*</span> y <span class="operator">+</span> <span class="number">0.2</span> <span class="operator">*</span> <span class="built_in">sqrt</span>(<span class="built_in">abs</span>(x));</span><br><span class="line">    ret :<span class="operator">=</span> ret <span class="operator">+</span> (<span class="number">20.0</span> <span class="operator">*</span> <span class="built_in">sin</span>(<span class="number">6.0</span> <span class="operator">*</span> x <span class="operator">*</span> pi) <span class="operator">+</span> <span class="number">20.0</span> <span class="operator">*</span> <span class="built_in">sin</span>(<span class="number">2.0</span> <span class="operator">*</span> x <span class="operator">*</span> pi)) <span class="operator">*</span> <span class="number">2.0</span> <span class="operator">/</span> <span class="number">3.0</span>;</span><br><span class="line">    ret :<span class="operator">=</span> ret <span class="operator">+</span> (<span class="number">20.0</span> <span class="operator">*</span> <span class="built_in">sin</span>(y <span class="operator">*</span> pi) <span class="operator">+</span> <span class="number">40.0</span> <span class="operator">*</span> <span class="built_in">sin</span>(y <span class="operator">/</span> <span class="number">3.0</span> <span class="operator">*</span> pi)) <span class="operator">*</span> <span class="number">2.0</span> <span class="operator">/</span> <span class="number">3.0</span>;</span><br><span class="line">    ret :<span class="operator">=</span> ret <span class="operator">+</span> (<span class="number">160.0</span> <span class="operator">*</span> <span class="built_in">sin</span>(y <span class="operator">/</span> <span class="number">12.0</span> <span class="operator">*</span> pi) <span class="operator">+</span> <span class="number">320</span> <span class="operator">*</span> <span class="built_in">sin</span>(y <span class="operator">*</span> pi <span class="operator">/</span> <span class="number">30.0</span>)) <span class="operator">*</span> <span class="number">2.0</span> <span class="operator">/</span> <span class="number">3.0</span>;</span><br><span class="line">    <span class="keyword">RETURN</span> ret;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$ <span class="keyword">LANGUAGE</span> plpgsql;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--将经度 x 和纬度 y 转换为新的经度坐标，用于gcj02towgs84函数中的计算</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE <span class="keyword">FUNCTION</span> transformLon(x float8, y float8)</span><br><span class="line"><span class="keyword">RETURNS</span> float8 <span class="keyword">AS</span> $$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    ret float8;</span><br><span class="line">   	pi float8 :<span class="operator">=</span> <span class="number">3.1415926535897932384626</span>;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    ret :<span class="operator">=</span> <span class="number">300.0</span> <span class="operator">+</span> x <span class="operator">+</span> <span class="number">2.0</span> <span class="operator">*</span> y <span class="operator">+</span> <span class="number">0.1</span> <span class="operator">*</span> x <span class="operator">*</span> x <span class="operator">+</span> <span class="number">0.1</span> <span class="operator">*</span> x <span class="operator">*</span> y <span class="operator">+</span> <span class="number">0.1</span> <span class="operator">*</span> <span class="built_in">sqrt</span>(<span class="built_in">abs</span>(x));</span><br><span class="line">    ret :<span class="operator">=</span> ret <span class="operator">+</span> (<span class="number">20.0</span> <span class="operator">*</span> <span class="built_in">sin</span>(<span class="number">6.0</span> <span class="operator">*</span> x <span class="operator">*</span> pi) <span class="operator">+</span> <span class="number">20.0</span> <span class="operator">*</span> <span class="built_in">sin</span>(<span class="number">2.0</span> <span class="operator">*</span> x <span class="operator">*</span> pi)) <span class="operator">*</span> <span class="number">2.0</span> <span class="operator">/</span> <span class="number">3.0</span>;</span><br><span class="line">    ret :<span class="operator">=</span> ret <span class="operator">+</span> (<span class="number">20.0</span> <span class="operator">*</span> <span class="built_in">sin</span>(x <span class="operator">*</span> pi) <span class="operator">+</span> <span class="number">40.0</span> <span class="operator">*</span> <span class="built_in">sin</span>(x <span class="operator">/</span> <span class="number">3.0</span> <span class="operator">*</span> pi)) <span class="operator">*</span> <span class="number">2.0</span> <span class="operator">/</span> <span class="number">3.0</span>;</span><br><span class="line">    ret :<span class="operator">=</span> ret <span class="operator">+</span> (<span class="number">150.0</span> <span class="operator">*</span> <span class="built_in">sin</span>(x <span class="operator">/</span> <span class="number">12.0</span> <span class="operator">*</span> pi) <span class="operator">+</span> <span class="number">300.0</span> <span class="operator">*</span> <span class="built_in">sin</span>(x <span class="operator">/</span> <span class="number">30.0</span> <span class="operator">*</span> pi)) <span class="operator">*</span> <span class="number">2.0</span> <span class="operator">/</span> <span class="number">3.0</span>;</span><br><span class="line">    <span class="keyword">RETURN</span> ret;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$ <span class="keyword">LANGUAGE</span> plpgsql;</span><br></pre></td></tr></table></figure>
+
+<h2 id="坐标转换"><a href="#坐标转换" class="headerlink" title="坐标转换"></a>坐标转换</h2><p>使用自定义的存储过程gcj02towgs84转换高德坐标如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--更新表单的 wgs84 坐标</span></span><br><span class="line"><span class="keyword">UPDATE</span> <span class="keyword">table</span> t</span><br><span class="line"><span class="keyword">SET</span> wgs84lat_cur <span class="operator">=</span> (<span class="keyword">SELECT</span> (gcj02towgs84(t.gps_lat, t.gps_long)).wgs84_lat),</span><br><span class="line">    wgs84lng_cur <span class="operator">=</span> (<span class="keyword">SELECT</span> (gcj02towgs84(t.gps_lat, t.gps_long)).wgs84_lon),</span><br><span class="line">    wgs84lat_data <span class="operator">=</span> (<span class="keyword">SELECT</span> (gcj02towgs84(t.data_gps_lat, t.data_gps_long)).wgs84_lat),</span><br><span class="line">    wgs84lng_data <span class="operator">=</span> (<span class="keyword">SELECT</span> (gcj02towgs84(t.data_gps_lat, t.data_gps_long)).wgs84_lon)</span><br></pre></td></tr></table></figure>
+
+<p>至此，高德坐标（GCJ-02）到 WGS84 坐标转换完成。</p>
+
       
     </div>
 
@@ -524,7 +548,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -571,12 +595,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">2k</span>
+    <span title="站点总字数">5k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4 分钟</span>
+    <span title="站点阅读时长">9 分钟</span>
 </div>
 
 <!-- 网站运行时间的设置 -->
