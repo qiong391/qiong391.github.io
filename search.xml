@@ -54,4 +54,9 @@ this.map.addLayer(new TileLayer(&#123;
         <tag>GIS</tag>
       </tags>
   </entry>
+  <entry>
+    <title></title>
+    <url>/2024/06/27/postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02%20to%20WGS84%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="postgresql中坐标转换"><a href="#postgresql中坐标转换" class="headerlink" title="postgresql中坐标转换"></a>postgresql中坐标转换</h2>]]></content>
+  </entry>
 </search>
