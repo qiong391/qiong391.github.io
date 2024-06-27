@@ -57,7 +57,9 @@ this.map.addLayer(new TileLayer(&#123;
   <entry>
     <title>postgresql中坐标转换（GCJ-02 to WGS84）</title>
     <url>/2024/06/27/postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02%20to%20WGS84%EF%BC%89/</url>
-    <content><![CDATA[<h1 id="postgresql中坐标转换（GCJ-02-to-WGS84）"><a href="#postgresql中坐标转换（GCJ-02-to-WGS84）" class="headerlink" title="postgresql中坐标转换（GCJ-02 to WGS84）"></a>postgresql中坐标转换（GCJ-02 to WGS84）</h1><p>PostgreSQL 默认情况下没有提供直接将高德坐标（GCJ-02）转换为 WGS84 坐标的函数。在 PostGIS 扩展中，没有直接支持高德坐标转换的函数。要在 PostgreSQL 中实现高德坐标到 WGS84 坐标的转换，需要使用外部库或者自定义函数。这里通过PostgreSQL 中的plpgsql扩展编写存储过程和函数实现坐标转换。</p>
+    <content><![CDATA[<p>PostgreSQL 默认情况下没有提供直接将高德坐标（GCJ-02）转换为 WGS84 坐标的函数。在 PostGIS 扩展中，没有直接支持高德坐标转换的函数。要在 PostgreSQL 中实现高德坐标到 WGS84 坐标的转换，需要使用外部库或者自定义函数。这里通过PostgreSQL 中的plpgsql扩展编写存储过程和函数实现坐标转换。</p>
+<span id="more"></span>
+
 <h2 id="安装plpgsql扩展"><a href="#安装plpgsql扩展" class="headerlink" title="安装plpgsql扩展"></a>安装plpgsql扩展</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> EXTENSION plpgsql;</span><br></pre></td></tr></table></figure>
 
 <h2 id="创建自定义函数"><a href="#创建自定义函数" class="headerlink" title="创建自定义函数"></a>创建自定义函数</h2><h3 id="主函数"><a href="#主函数" class="headerlink" title="主函数"></a>主函数</h3><p>函数参数为高德坐标的纬度 lat 和经度 lon，返回转换后的 WGS84 坐标的纬度 wgs84_lat 和经度 wgs84_lon。</p>
