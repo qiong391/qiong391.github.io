@@ -22,31 +22,35 @@
     var CONFIG = {"hostname":"qiong391.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="Love will always be there">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Welcome">
-<meta property="og:url" content="https://qiong391.github.io/index.html">
+  <meta name="description" content="前言KML文件是一种存储点数据xml文件格式，可以在地理信息系统中展示地理数据，本文实现了Java生成KML文件以及前端浏览器下载文件。 KML文件结构KML文件是一个XML文档，包含了用于描述地理信息的标记和元素，可用于定义的地理特征包括地点、描述、叠层、路径和多边形等。 轨迹KML文件基本结构如下： 1234567891011&lt;?xml version&#x3D;&quot;1.0&quot; e">
+<meta property="og:type" content="article">
+<meta property="og:title" content="导出轨迹为kml文件（java和vue实现）">
+<meta property="og:url" content="https://qiong391.github.io/2024/06/27/%E5%AF%BC%E5%87%BA%E8%BD%A8%E8%BF%B9%E4%B8%BAkml%E6%96%87%E4%BB%B6%EF%BC%88java%E5%92%8Cvue%E5%AE%9E%E7%8E%B0%EF%BC%89/index.html">
 <meta property="og:site_name" content="Welcome">
-<meta property="og:description" content="Love will always be there">
+<meta property="og:description" content="前言KML文件是一种存储点数据xml文件格式，可以在地理信息系统中展示地理数据，本文实现了Java生成KML文件以及前端浏览器下载文件。 KML文件结构KML文件是一个XML文档，包含了用于描述地理信息的标记和元素，可用于定义的地理特征包括地点、描述、叠层、路径和多边形等。 轨迹KML文件基本结构如下： 1234567891011&lt;?xml version&#x3D;&quot;1.0&quot; e">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-06-27T13:07:11.135Z">
+<meta property="article:modified_time" content="2024-06-27T13:06:58.958Z">
 <meta property="article:author" content="沉迷GIS的自来卷">
-<meta property="article:tag" content="GIS, java, vue">
+<meta property="article:tag" content="KML">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Blob">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://qiong391.github.io/">
+<link rel="canonical" href="https://qiong391.github.io/2024/06/27/%E5%AF%BC%E5%87%BA%E8%BD%A8%E8%BF%B9%E4%B8%BAkml%E6%96%87%E4%BB%B6%EF%BC%88java%E5%92%8Cvue%E5%AE%9E%E7%8E%B0%EF%BC%89/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>Welcome</title>
+  <title>导出轨迹为kml文件（java和vue实现） | Welcome</title>
   
 
 
@@ -182,9 +186,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -200,10 +205,9 @@
       <meta itemprop="name" content="Welcome">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/06/27/%E5%AF%BC%E5%87%BA%E8%BD%A8%E8%BF%B9%E4%B8%BAkml%E6%96%87%E4%BB%B6%EF%BC%88java%E5%92%8Cvue%E5%AE%9E%E7%8E%B0%EF%BC%89/" class="post-title-link" itemprop="url">导出轨迹为kml文件（java和vue实现）</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          导出轨迹为kml文件（java和vue实现）
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -225,7 +229,14 @@
                 </span>
             </span>
 
-          <br>
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
             <span class="post-meta-item" title="本文字数">
               <span class="post-meta-item-icon">
                 <i class="far fa-file-word"></i>
@@ -250,7 +261,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p><code>KML</code>文件是一种存储点数据<code>xml</code>文件格式，可以在地理信息系统中展示地理数据，本文实现了<code>Java</code>生成KML文件以及前端浏览器下载文件。</p>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p><code>KML</code>文件是一种存储点数据<code>xml</code>文件格式，可以在地理信息系统中展示地理数据，本文实现了<code>Java</code>生成KML文件以及前端浏览器下载文件。</p>
 <h3 id="KML文件结构"><a href="#KML文件结构" class="headerlink" title="KML文件结构"></a>KML文件结构</h3><p>KML文件是一个XML文档，包含了用于描述地理信息的标记和元素，可用于定义的地理特征包括地点、描述、叠层、路径和多边形等。</p>
 <p>轨迹KML文件基本结构如下：</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> standalone=<span class="string">&quot;yes&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">kml</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.opengis.net/kml/2.2&quot;</span> <span class="attr">xmlns:gx</span>=<span class="string">&quot;http://www.google.com/kml/ext/2.2&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Document</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>track name<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Placemark</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">LineString</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">coordinates</span>&gt;</span>lon,lat lon,lat<span class="tag">&lt;/<span class="name">coordinates</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">LineString</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">Placemark</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">Document</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">kml</span>&gt;</span></span><br></pre></td></tr></table></figure>
@@ -265,291 +276,35 @@
 
 <p>除了JAK库，还有其它一些Java工具可以用来导出KML文件，如GIS中常用的GeoTools库。</p>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+          <div class="post-tags">
+              <a href="/tags/KML/" rel="tag"># KML</a>
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/Blob/" rel="tag"># Blob</a>
+          </div>
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qiong391.github.io/2024/06/27/postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02%20to%20WGS84%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="沉迷GIS的自来卷">
-      <meta itemprop="description" content="Love will always be there">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Welcome">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/06/27/postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02%20to%20WGS84%EF%BC%89/" class="post-title-link" itemprop="url">postgresql中坐标转换（GCJ-02 to WGS84）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-06-27 19:52:44 / 修改时间：20:05:27" itemprop="dateCreated datePublished" datetime="2024-06-27T19:52:44+08:00">2024-06-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Note/" itemprop="url" rel="index"><span itemprop="name">Note</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.7k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><code>PostgreSQL</code> 默认情况下没有提供直接将高德坐标（GCJ-02）转换为 WGS84 坐标的函数。在 PostGIS 扩展中，没有直接支持高德坐标转换的函数。要在 PostgreSQL 中实现高德坐标到 WGS84 坐标的转换，需要使用外部库或者自定义函数。这里通过 PostgreSQL 中的 <code>plpgsql </code>扩展编写存储过程和函数实现坐标转换。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/06/27/postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02%20to%20WGS84%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qiong391.github.io/2024/04/30/mapTile/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="沉迷GIS的自来卷">
-      <meta itemprop="description" content="Love will always be there">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Welcome">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/04/30/mapTile/" class="post-title-link" itemprop="url">地图切片</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-30 14:24:50" itemprop="dateCreated datePublished" datetime="2024-04-30T14:24:50+08:00">2024-04-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-05-11 15:36:00" itemprop="dateModified" datetime="2024-05-11T15:36:00+08:00">2024-05-11</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Note/" itemprop="url" rel="index"><span itemprop="name">Note</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>瓦片数据是将矢量或影像数据进行预处理，采用高效的缓存机制（如金字塔）形成的缓存图片集，采用“级、行、列”方式进行组织，可在网页中快速加载。因此，瓦片地图加载是根据客户端请求的地图范围和级别，通过计算行列号获取对应级别下网格的瓦片（即服务器预裁剪的图片），由这些瓦片集在客户端形成一张地图。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/04/30/mapTile/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/06/27/postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02%20to%20WGS84%EF%BC%89/" rel="prev" title="postgresql中坐标转换（GCJ-02 to WGS84）">
+      <i class="fa fa-chevron-left"></i> postgresql中坐标转换（GCJ-02 to WGS84）
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qiong391.github.io/2024/04/28/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="沉迷GIS的自来卷">
-      <meta itemprop="description" content="Love will always be there">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Welcome">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/04/28/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-28 15:54:13" itemprop="dateCreated datePublished" datetime="2024-04-28T15:54:13+08:00">2024-04-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-05-06 16:44:22" itemprop="dateModified" datetime="2024-05-06T16:44:22+08:00">2024-05-06</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>367</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/04/28/hello-world/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
   
 
 
@@ -602,6 +357,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KML%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">KML文件结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8JAK%E5%BA%93%E7%94%9F%E6%88%90KML%E6%96%87%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">使用JAK库生成KML文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81"><span class="nav-number">3.1.</span> <span class="nav-text">核心代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF%E4%B8%8B%E8%BD%BDKML%E6%96%87%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">前端下载KML文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81-1"><span class="nav-number">4.1.</span> <span class="nav-text">核心代码</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
