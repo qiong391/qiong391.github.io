@@ -19,7 +19,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"qiong391.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"qiong391.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言KML文件是一种存储点数据xml文件格式，可以在地理信息系统中展示地理数据，本文实现了Java生成KML文件以及前端浏览器下载文件。">
@@ -81,6 +81,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="Welcome" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -200,7 +201,7 @@
       <meta itemprop="name" content="沉迷GIS的自来卷">
       <meta itemprop="description" content="Love will always be there">
     </span>
-
+    
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="Welcome">
     </span>
@@ -208,7 +209,7 @@
         <h1 class="post-title" itemprop="name headline">
           导出轨迹为kml文件（java和vue实现）
         </h1>
-
+    
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -216,7 +217,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
               
-
+    
               <time title="创建时间：2024-06-27 21:07:11 / 修改时间：21:09:07" itemprop="dateCreated datePublished" datetime="2024-06-27T21:07:11+08:00">2024-06-27</time>
             </span>
             <span class="post-meta-item">
@@ -228,7 +229,7 @@
                   <a href="/categories/Note/" itemprop="url" rel="index"><span itemprop="name">Note</span></a>
                 </span>
             </span>
-
+    
           
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
               <span class="post-meta-item-icon">
@@ -251,15 +252,15 @@
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>5 分钟</span>
             </span>
-
+    
         </div>
       </header>
-
+    
     
     
     
     <div class="post-body" itemprop="articleBody">
-
+    
       
         <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p><code>KML</code>文件是一种存储点数据<code>xml</code>文件格式，可以在地理信息系统中展示地理数据，本文实现了<code>Java</code>生成KML文件以及前端浏览器下载文件。</p>
 <span id="more"></span>
@@ -279,21 +280,21 @@
 <p>除了JAK库，还有其它一些Java工具可以用来导出KML文件，如GIS中常用的GeoTools库。</p>
 
     </div>
-
     
     
     
-
+    
+    
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/KML/" rel="tag"># KML</a>
               <a href="/tags/Java/" rel="tag"># Java</a>
               <a href="/tags/Blob/" rel="tag"># Blob</a>
           </div>
-
+    
         
 
-
+    
         
     <div class="post-nav">
       <div class="post-nav-item">
@@ -347,7 +348,7 @@
 
   <aside class="sidebar">
     <div class="sidebar-inner">
-
+    
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
           文章目录
@@ -356,13 +357,13 @@
           站点概览
         </li>
       </ul>
-
+    
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
           <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KML%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">KML文件结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8JAK%E5%BA%93%E7%94%9F%E6%88%90KML%E6%96%87%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">使用JAK库生成KML文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81"><span class="nav-number">3.1.</span> <span class="nav-text">核心代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF%E4%B8%8B%E8%BD%BDKML%E6%96%87%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">前端下载KML文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81-1"><span class="nav-number">4.1.</span> <span class="nav-text">核心代码</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
-
+    
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="沉迷GIS的自来卷"
@@ -408,7 +409,26 @@
 
 
       </div>
-
+      
+    
+      <div class="links-of-blogroll motion-element">
+        <div class="links-of-blogroll-title">
+          <i class="fa fa-history fa-" aria-hidden="true"></i>
+          近期文章
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="recent_posts_li">
+              <a href="/2024/06/27/%E5%AF%BC%E5%87%BA%E8%BD%A8%E8%BF%B9%E4%B8%BAkml%E6%96%87%E4%BB%B6%EF%BC%88java%E5%92%8Cvue%E5%AE%9E%E7%8E%B0%EF%BC%89/" title="导出轨迹为kml文件（java和vue实现）" target="_blank">导出轨迹为kml文件（java和vue实现）</a>
+            </li>
+            <li class="recent_posts_li">
+              <a href="/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02%20to%20WGS84%EF%BC%89/" title="postgresql中坐标转换（GCJ-02 to WGS84）" target="_blank">postgresql中坐标转换（GCJ-02 to WGS84）</a>
+            </li>
+            <li class="recent_posts_li">
+              <a href="/2024/04/30/mapTile/" title="地图切片" target="_blank">地图切片</a>
+            </li>
+        </ul>
+      </div>
+    
     </div>
   </aside>
   <div id="sidebar-dimmer"></div>
