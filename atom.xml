@@ -58,11 +58,11 @@
     <category term="Note" scheme="https://qiong391.github.io/categories/Note/"/>
     
     
-    <category term="GIS" scheme="https://qiong391.github.io/tags/GIS/"/>
-    
     <category term="GCJ-02" scheme="https://qiong391.github.io/tags/GCJ-02/"/>
     
     <category term="postgresql" scheme="https://qiong391.github.io/tags/postgresql/"/>
+    
+    <category term="GIS" scheme="https://qiong391.github.io/tags/GIS/"/>
     
   </entry>
   
@@ -83,9 +83,9 @@
     <category term="Note" scheme="https://qiong391.github.io/categories/Note/"/>
     
     
-    <category term="Tile" scheme="https://qiong391.github.io/tags/Tile/"/>
-    
     <category term="GIS" scheme="https://qiong391.github.io/tags/GIS/"/>
+    
+    <category term="Tile" scheme="https://qiong391.github.io/tags/Tile/"/>
     
   </entry>
   
