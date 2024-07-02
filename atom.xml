@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Welcome</title>
+  <title>Joeの博客</title>
   
-  
+  <subtitle>记录学习之路</subtitle>
   <link href="https://qiong391.github.io/atom.xml" rel="self"/>
   
   <link href="https://qiong391.github.io/"/>
@@ -10,7 +10,7 @@
   <id>https://qiong391.github.io/</id>
   
   <author>
-    <name>沉迷GIS的自来卷</name>
+    <name>Joe</name>
     
   </author>
   
