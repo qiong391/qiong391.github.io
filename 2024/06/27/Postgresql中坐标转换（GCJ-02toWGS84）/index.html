@@ -24,7 +24,7 @@
     <meta name="description" content="PostgreSQL 默认情况下没有提供直接将高德坐标（GCJ-02）转换为 WGS84 坐标的函数。在 PostGIS 扩展中，没有直接支持高德坐标转换的函数。要在 PostgreSQL 中实现高德坐标到 WGS84 坐标的转换，需要使用外部库或者自定义函数。这里通过 PostgreSQL 中的 plpgsql 扩展编写存储过程和函数实现坐标转换。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="postgresql中坐标转换（GCJ-02 to WGS84）">
-<meta property="og:url" content="https://qiong391.github.io/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02%20to%20WGS84%EF%BC%89/index.html">
+<meta property="og:url" content="https://qiong391.github.io/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02toWGS84%EF%BC%89/index.html">
 <meta property="og:site_name" content="Welcome">
 <meta property="og:description" content="PostgreSQL 默认情况下没有提供直接将高德坐标（GCJ-02）转换为 WGS84 坐标的函数。在 PostGIS 扩展中，没有直接支持高德坐标转换的函数。要在 PostgreSQL 中实现高德坐标到 WGS84 坐标的转换，需要使用外部库或者自定义函数。这里通过 PostgreSQL 中的 plpgsql 扩展编写存储过程和函数实现坐标转换。">
 <meta property="og:locale" content="zh_CN">
@@ -37,11 +37,11 @@
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://qiong391.github.io/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02%20to%20WGS84%EF%BC%89/">
+<link rel="canonical" href="https://qiong391.github.io/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02toWGS84%EF%BC%89/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qiong391.github.io/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02%20to%20WGS84%EF%BC%89/","path":"2024/06/27/Postgresql中坐标转换（GCJ-02 to WGS84）/","title":"postgresql中坐标转换（GCJ-02 to WGS84）"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qiong391.github.io/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02toWGS84%EF%BC%89/","path":"2024/06/27/Postgresql中坐标转换（GCJ-02toWGS84）/","title":"postgresql中坐标转换（GCJ-02 to WGS84）"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>postgresql中坐标转换（GCJ-02 to WGS84） | Welcome</title>
@@ -203,7 +203,7 @@
               <a href="/2024/06/27/%E5%AF%BC%E5%87%BA%E8%BD%A8%E8%BF%B9%E4%B8%BAkml%E6%96%87%E4%BB%B6%EF%BC%88java%E5%92%8Cvue%E5%AE%9E%E7%8E%B0%EF%BC%89/" title="导出轨迹为kml文件（java和vue实现）" target="_blank">导出轨迹为kml文件（java和vue实现）</a>
             </li>
             <li class="recent_posts_li">
-              <a href="/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02%20to%20WGS84%EF%BC%89/" title="postgresql中坐标转换（GCJ-02 to WGS84）" target="_blank">postgresql中坐标转换（GCJ-02 to WGS84）</a>
+              <a href="/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02toWGS84%EF%BC%89/" title="postgresql中坐标转换（GCJ-02 to WGS84）" target="_blank">postgresql中坐标转换（GCJ-02 to WGS84）</a>
             </li>
             <li class="recent_posts_li">
               <a href="/2024/04/30/mapTile/" title="地图切片" target="_blank">地图切片</a>
@@ -226,7 +226,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qiong391.github.io/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02%20to%20WGS84%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="https://qiong391.github.io/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02toWGS84%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -284,8 +284,8 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02%20to%20WGS84%EF%BC%89/#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02%20to%20WGS84%EF%BC%89/" itemprop="commentCount"></span>
+    <a title="waline" href="/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02toWGS84%EF%BC%89/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02toWGS84%EF%BC%89/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -488,7 +488,7 @@ setInterval("createtime()",250);
 
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"waline-server-brown-delta.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"locale":{"placeholder":"欢迎评论~"},"avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02%20to%20WGS84%EF%BC%89/"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"waline-server-brown-delta.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"locale":{"placeholder":"欢迎评论~"},"avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02toWGS84%EF%BC%89/"}</script>
 <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
 <script>
 document.addEventListener('page:loaded', () => {
