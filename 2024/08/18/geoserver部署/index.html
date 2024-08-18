@@ -21,26 +21,42 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"qiong391.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="Love will always be there">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Joeの博客">
-<meta property="og:url" content="https://qiong391.github.io/index.html">
+    <meta name="description" content="geoserver原版本需要升级，在虚拟机上尝试部署其最新版本2.25.3。经查，对应的java和tomcat版本分别为jdk11、tomcat9。记录一下从零开始的部署过程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="虚拟机部署Geoserver">
+<meta property="og:url" content="https://qiong391.github.io/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/index.html">
 <meta property="og:site_name" content="Joeの博客">
-<meta property="og:description" content="Love will always be there">
+<meta property="og:description" content="geoserver原版本需要升级，在虚拟机上尝试部署其最新版本2.25.3。经查，对应的java和tomcat版本分别为jdk11、tomcat9。记录一下从零开始的部署过程。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qiong391.github.io/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240816105517215.png">
+<meta property="og:image" content="https://qiong391.github.io/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240816105633228.png">
+<meta property="og:image" content="https://qiong391.github.io/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240816105751172.png">
+<meta property="og:image" content="https://qiong391.github.io/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240816112244155.png">
+<meta property="og:image" content="https://qiong391.github.io/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240816112307637.png">
+<meta property="og:image" content="https://qiong391.github.io/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240816113042430.png">
+<meta property="og:image" content="https://qiong391.github.io/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240816113223170.png">
+<meta property="og:image" content="https://qiong391.github.io/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240818162843795.png">
+<meta property="og:image" content="https://qiong391.github.io/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240818163318077.png">
+<meta property="og:image" content="https://qiong391.github.io/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240816145707883.png">
+<meta property="og:image" content="https://qiong391.github.io/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240818163841283.png">
+<meta property="article:published_time" content="2024-08-18T08:41:55.189Z">
+<meta property="article:modified_time" content="2024-08-18T09:01:48.157Z">
 <meta property="article:author" content="Joe">
-<meta property="article:tag" content="GIS, java, vue">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Geoserver">
+<meta property="article:tag" content="Tomcat">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qiong391.github.io/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240816105517215.png">
 
 
-<link rel="canonical" href="https://qiong391.github.io/">
+<link rel="canonical" href="https://qiong391.github.io/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qiong391.github.io/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/","path":"2024/08/18/geoserver部署/","title":"虚拟机部署Geoserver"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Joeの博客</title>
+<title>虚拟机部署Geoserver | Joeの博客</title>
   
 
 
@@ -74,7 +90,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">Joeの博客</h1>
+      <p class="site-title">Joeの博客</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">记录学习之路</p>
@@ -128,7 +144,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -141,6 +157,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Vim"><span class="nav-number">1.</span> <span class="nav-text">Vim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">镜像问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jdk"><span class="nav-number">3.</span> <span class="nav-text">jdk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tomcat"><span class="nav-number">4.</span> <span class="nav-text">Tomcat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Geoserver"><span class="nav-number">5.</span> <span class="nav-text">Geoserver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E4%BD%93%E9%97%AE%E9%A2%98"><span class="nav-number">6.</span> <span class="nav-text">字体问题</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -214,16 +231,17 @@
 
     </div>
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://qiong391.github.io/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -237,13 +255,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Joeの博客">
+      <meta itemprop="name" content="虚拟机部署Geoserver | Joeの博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/" class="post-title-link" itemprop="url">虚拟机部署Geoserver</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          虚拟机部署Geoserver
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -267,6 +285,13 @@
     </span>
 
   
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
   
   <span class="post-meta-item">
     
@@ -304,17 +329,57 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-          <p>geoserver原版本需要升级，在虚拟机上尝试部署其最新版本<code>2.25.3</code>。经查，对应的<code>java</code>和<code>tomcat</code>版本分别为<code>jdk11</code>、<code>tomcat9</code>。记录一下从零开始的部署过程。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
+    <div class="post-body" itemprop="articleBody"><p>geoserver原版本需要升级，在虚拟机上尝试部署其最新版本<code>2.25.3</code>。经查，对应的<code>java</code>和<code>tomcat</code>版本分别为<code>jdk11</code>、<code>tomcat9</code>。记录一下从零开始的部署过程。</p>
+<span id="more"></span>
+
+<h3 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h3><p>新安装的虚拟机上没有vim编辑器，先安装，方便查看编辑文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install vim （ubuntu）</span><br><span class="line">yum install vim （redHat/Fedora/CentOS） </span><br></pre></td></tr></table></figure>
+
+<h3 id="镜像问题"><a href="#镜像问题" class="headerlink" title="镜像问题"></a>镜像问题</h3><p>执行安装命令后报一下错误，可以看到镜像有误。</p>
+<img src="/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240816105517215.png" alt="image-20240816105517215" style="zoom: 80%;">
+
+<p>去<code>/etc/yum.repos.d</code>路径下的<code>CentOS-Base.repo</code>修改镜像源。</p>
+<p><img src="/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240816105633228.png" alt="image-20240816105633228"></p>
+<p>替换<code>baseurl</code>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">baseurl=http://mirrors.aliyun.com/centos/<span class="variable">$releasever</span>/os/<span class="variable">$basearch</span>/</span><br><span class="line">baseurl=http://mirrors.aliyun.com/centos/<span class="variable">$releasever</span>/updates/<span class="variable">$basearch</span>/</span><br><span class="line">baseurl=http://mirrors.aliyun.com/centos/<span class="variable">$releasever</span>/extras/<span class="variable">$basearch</span>/</span><br><span class="line">baseurl=http://mirrors.aliyun.com/centos/<span class="variable">$releasever</span>/centosplus/<span class="variable">$basearch</span>/</span><br></pre></td></tr></table></figure>
+
+<p>再次执行安装语句即成功。</p>
+<p><img src="/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240816105751172.png" alt="image-20240816105751172"></p>
+<h3 id="jdk"><a href="#jdk" class="headerlink" title="jdk"></a>jdk</h3><p>网上找到jdk11的包上传到服务器某一路径下，这里是&#x2F;home&#x2F;wang&#x2F;。</p>
+<p><img src="/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240816112244155.png" alt="image-20240816112244155"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -zxvf 文件名</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240816112307637.png" alt="image-20240816112307637"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置环境变量</span></span><br><span class="line">vim /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240816113042430.png" alt="image-20240816113042430"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重载配置文件</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>检查java版本，已生效。</p>
+<p><img src="/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240816113223170.png" alt="image-20240816113223170"></p>
+<p><code>shift+g</code>最后一行,<code>o</code>下方插入一行</p>
+<h3 id="Tomcat"><a href="#Tomcat" class="headerlink" title="Tomcat"></a>Tomcat</h3><p>同样地，下载tomcat9安装包，上传到服务器，解压，然后给防火墙添加访问端口，启动。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#给防火墙添加访问端口（与 /conf/server.xml 文件里端口一致）</span></span><br><span class="line"><span class="comment">#添加 --permanent永久生效，没有此参数重启后失效</span></span><br><span class="line">firewall-cmd --zone=public --add-port=8080/tcp --permanent </span><br><span class="line"><span class="comment">#重新载入</span></span><br><span class="line">firewall-cmd --reload</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动</span></span><br><span class="line">./startup.sh	</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看日志</span></span><br><span class="line"><span class="built_in">tail</span> -f /path/to/tomcat/logs/catalina.out</span><br></pre></td></tr></table></figure>
+
+<p>最后根据自己的ip+端口可以看到以下页面即成功。</p>
+<img src="/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240818162843795.png" alt="image-20240818162843795" style="zoom: 67%;">
+
+<h3 id="Geoserver"><a href="#Geoserver" class="headerlink" title="Geoserver"></a>Geoserver</h3><p>在<a target="_blank" rel="noopener" href="https://geoserver.org/">GeoServer</a>下载war包上传到服务器，复制到tomcat的<code>webapps</code>目录下，会自动解压出geoserver文件夹。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将war包放到tomcat下，war包保留</span></span><br><span class="line"><span class="built_in">cp</span> geoserver.war apache-tomcat-9.0.93/webapps/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果需要更换geoserver的jdk版本，在tomcat/bin目录下的catalina.sh和setclasspath.sh中设置环境变量</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/home/wang/jdk-11.0.12</span><br><span class="line"><span class="built_in">export</span> JRE_HOME=/home/wang/jdk-11.0.12</span><br></pre></td></tr></table></figure>
+
+<p>重启tomcat后，浏览器输入<code>http://ip:port/geoserver/</code>，打开如下界面即成功。</p>
+<img src="/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240818163318077.png" alt="image-20240818163318077" style="zoom: 67%;">
+
+<h3 id="字体问题"><a href="#字体问题" class="headerlink" title="字体问题"></a>字体问题</h3><p>账号密码登录geoserver后，表面上看起来没什么问题，但部分样式没有生效。疑惑之际，点开左侧的服务器状态可以看到字体配置存在问题，导致样式的字体设置不生效。</p>
+<p><img src="/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240816145707883.png" alt="image-20240816145707883"></p>
+<p>于是查看服务器字体信息，发现缺少字体库，直接安装！</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看字体信息</span></span><br><span class="line">fc-list</span><br><span class="line"><span class="comment"># 安装字体库</span></span><br><span class="line">yum -y install fontconfig</span><br><span class="line"><span class="comment"># 更新字体缓存</span></span><br><span class="line">fc-cache</span><br></pre></td></tr></table></figure>
+
+<p>再点开就可以看到正常的服务器信息了。</p>
+<img src="/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/image-20240818163841283.png" alt="image-20240818163841283" style="zoom: 67%;">
+
+<p>Over~</p>
+
     </div>
 
     
@@ -322,359 +387,28 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------　　　　本文结束　<i class="fa fa-flag"></i>　感谢阅读　　　　-------------</div>
+    
 </div>
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+              <a href="/tags/Geoserver/" rel="tag"><i class="fa fa-tag"></i> Geoserver</a>
+              <a href="/tags/Tomcat/" rel="tag"><i class="fa fa-tag"></i> Tomcat</a>
+          </div>
 
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://qiong391.github.io/2024/06/27/%E5%AF%BC%E5%87%BA%E8%BD%A8%E8%BF%B9%E4%B8%BAkml%E6%96%87%E4%BB%B6%EF%BC%88java%E5%92%8Cvue%E5%AE%9E%E7%8E%B0%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Joe">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Joeの博客">
-      <meta itemprop="description" content="Love will always be there">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Joeの博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/27/%E5%AF%BC%E5%87%BA%E8%BD%A8%E8%BF%B9%E4%B8%BAkml%E6%96%87%E4%BB%B6%EF%BC%88java%E5%92%8Cvue%E5%AE%9E%E7%8E%B0%EF%BC%89/" class="post-title-link" itemprop="url">导出轨迹为kml文件（java和vue实现）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2024-06-27 21:07:11 / 修改时间：21:09:07" itemprop="dateCreated datePublished" datetime="2024-06-27T21:07:11+08:00">2024-06-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Note/" itemprop="url" rel="index"><span itemprop="name">Note</span></a>
-        </span>
-    </span>
-
-  
-  
-  <span class="post-meta-item">
-    
-    <span class="post-meta-item-icon">
-      <i class="far fa-comment"></i>
-    </span>
-    <span class="post-meta-item-text">Waline：</span>
-  
-    <a title="waline" href="/2024/06/27/%E5%AF%BC%E5%87%BA%E8%BD%A8%E8%BF%B9%E4%B8%BAkml%E6%96%87%E4%BB%B6%EF%BC%88java%E5%92%8Cvue%E5%AE%9E%E7%8E%B0%EF%BC%89/#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/2024/06/27/%E5%AF%BC%E5%87%BA%E8%BD%A8%E8%BF%B9%E4%B8%BAkml%E6%96%87%E4%BB%B6%EF%BC%88java%E5%92%8Cvue%E5%AE%9E%E7%8E%B0%EF%BC%89/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>2.7k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>5 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p><code>KML</code>文件是一种存储点数据<code>xml</code>文件格式，可以在地理信息系统中展示地理数据，本文实现了<code>Java</code>生成KML文件以及前端浏览器下载文件。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/06/27/%E5%AF%BC%E5%87%BA%E8%BD%A8%E8%BF%B9%E4%B8%BAkml%E6%96%87%E4%BB%B6%EF%BC%88java%E5%92%8Cvue%E5%AE%9E%E7%8E%B0%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://qiong391.github.io/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02toWGS84%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Joe">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Joeの博客">
-      <meta itemprop="description" content="Love will always be there">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Joeの博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02toWGS84%EF%BC%89/" class="post-title-link" itemprop="url">postgresql中坐标转换（GCJ-02 to WGS84）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2024-06-27 19:52:44 / 修改时间：20:05:27" itemprop="dateCreated datePublished" datetime="2024-06-27T19:52:44+08:00">2024-06-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Note/" itemprop="url" rel="index"><span itemprop="name">Note</span></a>
-        </span>
-    </span>
-
-  
-  
-  <span class="post-meta-item">
-    
-    <span class="post-meta-item-icon">
-      <i class="far fa-comment"></i>
-    </span>
-    <span class="post-meta-item-text">Waline：</span>
-  
-    <a title="waline" href="/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02toWGS84%EF%BC%89/#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02toWGS84%EF%BC%89/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>2.7k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>5 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><code>PostgreSQL</code> 默认情况下没有提供直接将高德坐标（GCJ-02）转换为 WGS84 坐标的函数。在 PostGIS 扩展中，没有直接支持高德坐标转换的函数。要在 PostgreSQL 中实现高德坐标到 WGS84 坐标的转换，需要使用外部库或者自定义函数。这里通过 PostgreSQL 中的 <code>plpgsql </code>扩展编写存储过程和函数实现坐标转换。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/06/27/Postgresql%E4%B8%AD%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%EF%BC%88GCJ-02toWGS84%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/06/27/%E5%AF%BC%E5%87%BA%E8%BD%A8%E8%BF%B9%E4%B8%BAkml%E6%96%87%E4%BB%B6%EF%BC%88java%E5%92%8Cvue%E5%AE%9E%E7%8E%B0%EF%BC%89/" rel="prev" title="导出轨迹为kml文件（java和vue实现）">
+                  <i class="fa fa-angle-left"></i> 导出轨迹为kml文件（java和vue实现）
+                </a>
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://qiong391.github.io/2024/04/30/mapTile/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Joe">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Joeの博客">
-      <meta itemprop="description" content="Love will always be there">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Joeの博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/30/mapTile/" class="post-title-link" itemprop="url">地图切片</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-04-30 14:24:50" itemprop="dateCreated datePublished" datetime="2024-04-30T14:24:50+08:00">2024-04-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-06-27 21:16:12" itemprop="dateModified" datetime="2024-06-27T21:16:12+08:00">2024-06-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Note/" itemprop="url" rel="index"><span itemprop="name">Note</span></a>
-        </span>
-    </span>
-
-  
-  
-  <span class="post-meta-item">
-    
-    <span class="post-meta-item-icon">
-      <i class="far fa-comment"></i>
-    </span>
-    <span class="post-meta-item-text">Waline：</span>
-  
-    <a title="waline" href="/2024/04/30/mapTile/#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/2024/04/30/mapTile/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>1.8k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>3 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>瓦片数据是将矢量或影像数据进行预处理，采用高效的缓存机制（如金字塔）形成的缓存图片集，采用“级、行、列”方式进行组织，可在网页中快速加载。因此，瓦片地图加载是根据客户端请求的地图范围和级别，通过计算行列号获取对应级别下网格的瓦片（即服务器预裁剪的图片），由这些瓦片集在客户端形成一张地图。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/04/30/mapTile/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
+            <div class="post-nav-item">
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          </div>
     </footer>
   </article>
 </div>
@@ -683,6 +417,8 @@
 
 
 
+
+    <div class="comments" id="waline"></div>
 </div>
   </main>
 
@@ -792,7 +528,7 @@ setInterval("createtime()",250);
 
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"waline-server-brown-delta.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"locale":{"placeholder":"欢迎评论~"},"avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"waline-server-brown-delta.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"locale":{"placeholder":"欢迎评论~"},"avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2024/08/18/geoserver%E9%83%A8%E7%BD%B2/"}</script>
 <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
 <script>
 document.addEventListener('page:loaded', () => {
